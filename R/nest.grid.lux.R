@@ -28,5 +28,5 @@ p3
 sf::st_write(nested500,"data/lunested500.gpkg")
 
 #Run and save entire Lux country at 100m
-nested100<-nest.grid(lukm,res=100)
+nested100<-nest.grid(lukm,res=100) #BEWARE OVER 20minutes on MacBook pro 2,3 GHz Quad-Core Intel Core i7 
 sf::st_write(nested100,"data/lunested100.gpkg")
