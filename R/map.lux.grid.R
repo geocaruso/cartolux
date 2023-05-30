@@ -66,7 +66,7 @@ p3<-ggplot.themap.f(lukm,"n_intscts_f",main.title = "Number of communes intersec
 p3b<-p3+ggplot2::geom_sf(data=lucom3035,fill=NA,col='white')
 p3b
 
-#3. Tabulating areas and correspondence tables ----
+#3. Tabulating areas and area based correspondence table ----
 ##3.1. Intersection----
 # to get two-ways "tabulation of areas" between cells and communes
 
@@ -82,7 +82,7 @@ p4<-ggplot.themap(luintsection,"share_of_com",n=8, n.digits = 4,
 p4
 
 ##3.2. Wide----
-# Keep shares in wide and unique corresp to build corresp table
+# Keep surface in wide format and build many (cells) to one (commune) corresp table
 wide_cell_LAU2_m2<-reshape2::dcast(sf::st_drop_geometry(luintsection),CELLCODE~LAU2,value.var = "itsct_m2")
 wide_cell_LAU2_m2[is.na(wide_cell_LAU2_m2)] <- 0 #could use na rm later but won't work with col.max
 rowSums(wide_cell_LAU2_m2[,2:103]) #to check all rows sum to 1
@@ -113,11 +113,10 @@ names(Grid1km_LAU2_m2_1)[4:105]<-paste0("m2_",names(Grid1km_LAU2_m2_1)[4:105])
 Grid1km_LAU2_m2<-Grid1km_LAU2_m2_1[match(lukm$CELLCODE,Grid1km_LAU2_m2_1$CELLCODE),]
 write.csv(Grid1km_LAU2_m2,"data/Grid1km_LAU2_m2.csv")
 
-lukm_Grid1km_LAU2_m2_sf<-merge(lukm,Grid1km_LAU2_m2)
-sf::st_write(lukm_Grid1km_LAU2_m2_sf,"data/lukm_Grid1km_LAU2_m2.gpkg")
+Grid1km_LAU2_m2_sf<-merge(lukm,Grid1km_LAU2_m2)
+sf::st_write(Grid1km_LAU2_m2_sf,"data/Grid1km_LAU2_m2.gpkg", delete_dsn=TRUE)
 
-pcom<-ggplot()+geom_sf(data=lukm_Grid1km_LAU2_m2_sf,fill=maxm2LAU2)
-
+pcom<-ggplot2::ggplot()+ggplot2::geom_sf(data=Grid1km_LAU2_m2_sf,fill=maxm2LAU2)
 
 ##4. Printing----
 pdf("output/Lux_grids_map.pdf")
