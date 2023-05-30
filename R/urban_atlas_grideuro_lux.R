@@ -47,7 +47,7 @@ luintsection[,"share_of_cell"]<-as.numeric(luintsection$itsct_m2/1000000) #surfa
 wide_cell_LAU2_m2<-reshape2::dcast(sf::st_drop_geometry(luintsection),GRD_ID~LAU2,value.var = "itsct_m2")
 wide_cell_LAU2_m2[is.na(wide_cell_LAU2_m2)] <- 0 #could use na rm later but won't work with col.max
 rowSums(wide_cell_LAU2_m2[,2:103]) #to check all rows sum to 1
-#OK except external orders OK
+#OK except external borders OK
 colSums(wide_cell_LAU2_m2[,2:103]) #to check sums are surface of communes
 #OK see lucom3035$com_m2 (re-ordered)
 
@@ -76,17 +76,19 @@ lukm_Grid1km_LAU2_m2_sf<-merge(grid_estat_lu,Grid1km_LAU2_m2)
 
 #Carte de correspondance des cellules et des communes
 source("R/ggplot.themap.R")
-p1b<-ggplot2::ggplot(data=lukm_Grid1km_LAU2_m2_sf)+ggplot2::geom_sf(aes(fill= maxm2LAU2), show.legend = FALSE) +
-  scale_fill_viridis_d(option = "turbo") +
-  labs(title = "Correspondace des cellules aux communes", caption = "Source : Eurostat") +
-  theme_light()
+p1b<-ggplot2::ggplot(data=lukm_Grid1km_LAU2_m2_sf)+
+  ggplot2::geom_sf(ggplot2::aes(fill= maxm2LAU2), show.legend = FALSE) +
+  ggplot2::scale_fill_viridis_d(option = "turbo") +
+  ggplot2::labs(title = "Correspondace des cellules aux communes", caption = "Source : Eurostat") +
+  ggplot2::theme_light()
 p1b
 
 #Carte de correspondance des cellules et des communes (Meilleur rendu)
-p2b<-ggplot2::ggplot(data=Grid1km_LAU2_m2_sf)+ggplot2::geom_sf(aes(fill= COMMUNE), show.legend = FALSE) +
-  scale_fill_viridis_d(option = "turbo") +
-  labs(title = "Correspondace des cellules aux communes", caption = "Source : Eurostat") +
-  theme_light()
+p2b<-ggplot2::ggplot(data=lukm_Grid1km_LAU2_m2_sf)+
+  ggplot2::geom_sf(ggplot2::aes(fill= COMMUNE), show.legend = FALSE) +
+  ggplot2::scale_fill_viridis_d(option = "turbo") +
+  ggplot2::labs(title = "Correspondace des cellules aux communes", caption = "Source : Eurostat") +
+  ggplot2::theme_light()
 p2b
 
 
