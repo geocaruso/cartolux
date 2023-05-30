@@ -65,12 +65,16 @@ merged2many$Pop2021EU_sh_of_LAU2<-merged_agg$Pop2021EU/merged_agg$SumPop2021EU
 
 Grid1km_LAU2_Pop2021EU<-merged2many[match(Grid1km_LAU2_popEU$CELLCODE,merged2many$CELLCODE),]
 
+
+#Mapping correspondance shares
 pfi_sh<-ggplot.themap(Grid1km_LAU2_Pop2021EU,
                      "Pop2021EU_sh_of_LAU2",n=7, style="fisher")
 pfi_sh
+
 
 #save
 sf::st_write(Grid1km_LAU2_Pop2021EU,"data/Grid1km_LAU2_Pop2021EU.gpkg", delete_dsn=TRUE)
 write.csv(sf::st_drop_geometry(Grid1km_LAU2_Pop2021EU),"data/Grid1km_LAU2_Pop2021EU.csv")
 
+#print
 
