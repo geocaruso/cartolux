@@ -34,8 +34,30 @@ sf::st_write(lux102_4326,"data/lux102_4326.gpkg", append=FALSE) #at first run ge
 p3<-p2+
   ggplot2::geom_sf(data=lux102_4326, fill=NA,colour="green",linewidth=0.3)
 p3+ggplot2::ggtitle("Luxembourg: 118 (red), 116 (blue), 102 (green) communes",
-                    subtitle = "source: giscoR and EuroGeographics for the boundaries")
+                    subtitle = "source: giscoR and EuroGeographics for the boundaries")+
+  ggplot2::theme_bw()
 
+#get postcodes----
+post_lu_4258 <- giscoR::gisco_get_postalcodes(country = "LU")
+post_lu_4326<-sf::st_transform(post_lu_4258, sf::st_crs(lux102_4326))
+
+sf::st_write(post_lu_4326,"data/post_lu_4326.gpkg", append=FALSE)
+
+post<-ggplot2::ggplot()+
+  ggplot2::geom_sf(data=post_lu_4326, size=0.1)+
+  ggplot2::geom_sf(data=lux102_4326, fill=NA,colour="goldenrod",linewidth=0.1)+
+  ggplot2::labs(title = "Luxembourg post codes points",
+                caption = paste("(c) European Union - GISCO, 2021,",
+                                "postal code point dataset (CC-BY-SA 4.0)",
+                                "Boundaries: EuroGeographics",
+                                "via giscoR",
+                                sep = "\n")
+                )+
+  ggplot2::theme_bw()
+post
+
+#printing----
 pdf("output/map_giscoR_communes.pdf")
 print(p3)
+print(post)
 dev.off()
