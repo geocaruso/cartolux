@@ -60,7 +60,8 @@ Grid1km_LAU2_Pop2021EU_Surf1218$SumSurf2012_m2[is.na(Grid1km_LAU2_Pop2021EU_Surf
 Grid1km_LAU2_Pop2021EU_Surf1218$SumSurf2018_m2[is.na(Grid1km_LAU2_Pop2021EU_Surf1218$SumSurf2018_m2)]<-0
 
 
-#Build allocation factor (share) according to urban surface
+#Build allocation factor ----
+# (share) according to urban surface
 # ! given allocation of each cell to a single commune based on total surface !
 
 agg_SumSurf_LAU2<-aggregate(list(LAU2Surf2012_m2=Grid1km_LAU2_Pop2021EU_Surf1218$SumSurf2012_m2,
@@ -73,12 +74,16 @@ merged2many$Urban2012_sh_of_LAU2<-merged2many$SumSurf2012_m2/merged2many$LAU2Sur
 merged2many$Urban2018_sh_of_LAU2<-merged2many$SumSurf2018_m2/merged2many$LAU2Surf2018_m2
 
 
-
 #Reorder rows and rearrange columns
 Grid1km_LAU2_Pop2021EU_Surf1218<-merged2many[match(Grid1km_LAU2_Pop2021EU_Surf1218$CELLCODE,merged2many$CELLCODE),]
 Grid1km_LAU2_Pop2021EU_Surf1218<-Grid1km_LAU2_Pop2021EU_Surf1218[,c(2,1,3:11,13,14,12)]
 
-#Mapping correspondance shares
+#save----
+sf::st_write(Grid1km_LAU2_Pop2021EU_Surf1218,"data/Grid1km_LAU2_Pop2021EU_Surf1218.gpkg", delete_dsn=TRUE)
+write.csv(sf::st_drop_geometry(Grid1km_LAU2_Pop2021EU_Surf1218),"data/Grid1km_LAU2_Pop2021EU_Surf1218.csv")
+
+#Mapping----
+# correspondance shares
 pqt_sh_urb<-ggplot.themap(Grid1km_LAU2_Pop2021EU_Surf1218[Grid1km_LAU2_Pop2021EU_Surf1218$SumSurf2018_m2>0,],
                       "Urban2018_sh_of_LAU2",n=7, style="quantile",
                       cl.colours = rev(RColorBrewer::brewer.pal(7,"PiYG")),
