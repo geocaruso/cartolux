@@ -33,4 +33,9 @@ sf::st_write(lux102_4326,"data/lux102_4326.gpkg", append=FALSE) #at first run ge
 
 p3<-p2+
   ggplot2::geom_sf(data=lux102_4326, fill=NA,colour="green",linewidth=0.3)
-p3+ggplot2::ggtitle("Luxembourg: 118 (red), 116 (blue), 102 (green) communes",subtitle = "source: giscoR")
+p3+ggplot2::ggtitle("Luxembourg: 118 (red), 116 (blue), 102 (green) communes",
+                    subtitle = "source: giscoR and EuroGeographics for the boundaries")
+
+pdf("output/map_giscoR_communes.pdf")
+print(p3)
+dev.off()
