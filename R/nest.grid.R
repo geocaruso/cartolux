@@ -12,18 +12,17 @@
 #' @export
 #'
 #' @examples See nest.grid.lux.R
-nest.grid<-function(ingrid,res=250){
+nest.grid<-function(ingrid,res=250,idcol=1){
   
   #get the 5 coords pairs for each input grid cell
   dfcoords<-data.frame(sf::st_coordinates(ingrid))
-  #derive base resolution from difference in Y between first and 2nd pair
-  # of first square:
-  input_r<-abs(dfcoords[1,2]-dfcoords[2,2])
+  #derive base resolution from Y difference of first square:
+  input_r<-sf::st_bbox(ingrid[1,])$ymax-sf::st_bbox(ingrid[1,])$ymin
   if ((input_r %% res) >0){stop("Remainder of dividing input resolution by target resolution not null")}
   # split input into list so child output cell will know parent output cell
   splitted<-split(dfcoords,dfcoords$L2) #dfcoords$L2 identifies polygons
   #reuse input cells names with IN first to avoid numbers to start names and indicate it is input name
-  names(splitted)<-paste0("IN",ingrid$CELLCODE)
+  names(splitted)<-paste0("IN",sf::st_drop_geometry(ingrid)[,idcol])
   
   #sq.polyg function gives the 5 coordinates pairs of the new (smaller) square polygons
   #given the requested resolution r and list of base polygons origin x and origin y
