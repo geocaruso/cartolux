@@ -1,6 +1,14 @@
+#The script computes the max distance from any point within each
+#municipality. It depends on the simplification level used for digitizing
+# since it computes the max distance after pairing all coordinates making
+# a polygon.
+# For use in other contexts, a simplify of polygons may be required beforehand.
+
+#Get lat long Lux 102 communes and reproject into LUREF coordinates system (meters)
 lux102_4326<-sf::st_read("data/Communes102_4326.gpkg")
 lux102_2169<-sf::st_transform(lux102_4326, crs=2169)
 
+#Compute max plus NS and SE ranges
 list_distances<-lapply(lux102_2169$LAU2,function(x){
 i<-lux102_2169[lux102_2169$LAU2==x,]
 bbi<-sf::st_bbox(i)
