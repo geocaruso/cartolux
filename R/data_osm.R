@@ -46,3 +46,18 @@ myplot_of_i<-ggplot2::ggplot()+
   # ggplot2::geom_sf(data=M ,col="red", size=2)+
   ggplot2::theme_bw()
 print(myplot_of_i)
+
+####Plot every communes with its townhall
+
+pdf(file="output/Lux_mairies_check_osm.pdf")
+for (i in 1:102) {
+  iLUX<-LUX[i,] #we subset the i'th observation (municipality)
+  # keeping all the attributes including the geometry
+  iname<-LUX[i,"com"]
+  myplot_of_i<-ggplot2::ggplot()+
+    ggplot2::geom_sf(data=iLUX,fill="white",col='grey')+
+    ggplot2::geom_sf(data=all_mairies[i,] ,col="darkgreen", size=2)+
+    ggplot2::theme_bw()
+  print(myplot_of_i)
+}
+dev.off()
