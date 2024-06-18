@@ -5,10 +5,10 @@
 install.packages("osrm")
 library(osrm)
 
-####Chargement de la couche de points correspondant aux mairies des communes du Luxembourg
-mairies_com_lux <- sf::read_sf("data/Mairies_W2_2018.shp")
-names(mairies_com_lux)[2] <- "Mairie"
-names(mairies_com_lux)[6] <- "Localité"
+# ####Chargement de la couche de points correspondant aux mairies des communes du Luxembourg
+source("R/data_osm.R")
+
+mairies_com_lux <- sf::st_transform(all_mairies, crs = 2169)
 
 ####Calcul de distances en voitures (en m) entre les 100 premières communes et les 100 premières communes####
 matdist <- osrm::osrmTable(src = mairies_com_lux$geometry[1:100], dst = mairies_com_lux$geometry[1:100], measure = "distance", osrm.profile = "car")
@@ -37,11 +37,11 @@ dist_4_2 <- rbind(dist_4, dist_2)
 ####Et les 102 colonnes avec les 102 lignes####
 dist <- cbind(dist_1_3, dist_4_2)
 #####Récupération des noms des communes
-row.names(dist) <- mairies_com_lux$Mairie
-colnames(dist) <- mairies_com_lux$Mairie
+row.names(dist) <- mairies_com_lux$com
+colnames(dist) <- mairies_com_lux$com
 
 ####Ecriture de la matrice####
-write.csv(dist, "output/dist.csv")
+write.csv(dist, "output/matrice_dist_car_lux.csv")
 
 ####Distances euclidiennes
 
@@ -53,8 +53,8 @@ matdisteucli <- as.data.frame.matrix(disteucli)
 matdisteucli <- (matdisteucli/1000)
 
 #####Récupération des noms des communes
-row.names(matdisteucli) <- mairies_com_lux$Marie
-colnames(matdisteucli) <- mairies_com_lux$Marie
+row.names(matdisteucli) <- mairies_com_lux$com
+colnames(matdisteucli) <- mairies_com_lux$com
 
 ####Ecriture de la matrice####
-write.csv(matdisteucli, "output/disteucli.csv")
+write.csv(matdisteucli, "output/matrice_dist_eucli_lux.csv")
