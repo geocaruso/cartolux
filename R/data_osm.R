@@ -38,3 +38,11 @@ list_mairie[i] <- list(ipoly_mairie_in)
 }
 
 all_mairies <- do.call(rbind, (list_mairie))
+
+####Plot communes and towhall
+myplot_of_i<-ggplot2::ggplot()+
+  ggplot2::geom_sf(data=LUX,fill="white",col='grey')+
+  ggplot2::geom_sf(data=all_mairies ,col="darkgreen", size=2)+
+  # ggplot2::geom_sf(data=M ,col="red", size=2)+
+  ggplot2::theme_bw()
+print(myplot_of_i)
