@@ -37,7 +37,7 @@ sf::st_write(nested200,"LU_nested_grids/lunested200.gpkg",delete_dsn=TRUE) #expo
 sf::st_write(nested200,"LU_nested_grids/lunested200.shp",delete_dsn=TRUE) #export shp
 
 #GPKG OF LU GRID 100 m with code and coordinates of origin and centre
-nested100<-nest.grid(lukm,res=100) #9h32
+nested100<-nest.grid(lukm,res=100)# over 20min !!
 nested100coords<-data.frame(sf::st_coordinates(nested100))
 origincoords100<-nested100coords[match(unique(nested100coords[,"L2"]),nested100coords[,"L2"]),c(1,2)]
 nested100$CELLCODE100m<-paste0("100mE",origincoords100[,1]/100,"N",origincoords100[,2]/100)
