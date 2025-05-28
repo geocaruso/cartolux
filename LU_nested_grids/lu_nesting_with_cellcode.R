@@ -3,15 +3,14 @@
 #1km grid of Lux
 lukm<-readRDS("data/lukm3035.RDS") 
 
-source("R/nest.grid.R")
-# nested200<-nest.grid(lukm,res=200) ###about 20min
-# 
-# nested200coords<-data.frame(sf::st_coordinates(nested200))
-# origincoords200<-nested200coords[match(unique(nested200coords[,"L2"]),nested200coords[,"L2"]),c(1,2)]
-# nested200$CELLCODE200m<-paste0("200mE",origincoords200[,1]/100,"N",origincoords200[,2]/100)
-# 
-# sf::st_write(nested200,"data/lunested200.gpkg",delete_dsn=TRUE) #export gpkg
+# code R for subdividing a grid 
+source("R/nest.grid.R") 
 
+# Application to Luxembourg to get 100, 200 and 500m grids from 1km grid
+# and add cellcodes (format in line with inspire)
+# plus coordinates of origin and centroid 
+# 
+# 
 #GPKG OF LU GRID 500 m with code and coordinates of origin and centre
 nested500<-nest.grid(lukm,res=500)
 nested500coords<-data.frame(sf::st_coordinates(nested500))
